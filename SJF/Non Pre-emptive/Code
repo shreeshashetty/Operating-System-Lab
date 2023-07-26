@@ -1,0 +1,87 @@
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+
+struct node{
+    char name[2];
+    int arrivalTime;
+    int burstTime;
+    struct node* link;
+};
+typedef struct node node;
+node* start=NULL;
+
+
+void insert(){
+    char str[2];
+    int bt,at;
+    node* newTask=(node*)malloc(sizeof(node));
+    printf("Enter the name,arrival time(min) and burst time(min)\n");
+    scanf("%s %d %d",str,&at,&bt);
+    strcpy(newTask->name,str);
+    newTask->arrivalTime=at;
+    newTask->burstTime=bt;
+    if(start==NULL){
+        start=newTask;
+        newTask->link=NULL;
+    }else if(start->burstTime>newTask->burstTime){
+        newTask->link=start;
+        start=newTask;
+     }else{
+        node* cur=start;
+        node* temp=start->link;
+        while(temp->burstTime<newTask->burstTime && temp!=NULL){
+            cur=temp;
+            temp=temp->link;
+        }
+        cur->link=newTask;
+        newTask->link=temp;
+
+    }
+}
+
+void display(){
+    int totalTime=0;
+    int totalTAT=0;
+    int totalWT=0;
+    int count=0;
+    if(start==NULL){
+        printf("No task present\n");
+    }
+    else{
+        node* cur=start;
+        int waitingTime;
+        int turnAroundTime;
+        while(cur!=NULL){
+            count++;
+            totalTime+=cur->burstTime;
+            turnAroundTime=totalTime-cur->arrivalTime;
+            waitingTime=turnAroundTime-cur->burstTime;
+            printf("%s(waitingTime %d,turnAroundTime %d)->",cur->name,waitingTime,turnAroundTime);
+
+            totalTAT+=turnAroundTime;
+            totalWT+=waitingTime;
+            cur=cur->link;
+        }
+    }
+    float avgTAT=totalTAT/count;
+    float avgWT=totalWT/count;
+    printf("\nAverage turn around time %f and average waiting time %f\n",avgTAT,avgWT);
+}
+
+int main(){
+    int ch;
+    while(1){
+        printf("Enter your choice\n");
+        printf("1.Insert for non-pre-emptive  2.Display waiting and turn around time in non-pre-emptive 3.Exit\n");
+        scanf("%d",&ch);
+        switch(ch){
+        case 1: insert();
+                break;
+        case 2: display();
+                break;
+        case 3: break;
+        default: printf("Invalid input\n");
+        }
+    }
+}
