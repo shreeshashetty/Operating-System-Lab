@@ -1,0 +1,112 @@
+#include<stdio.h>
+
+void firstFit(int requiredSpace,int memorySpace[],int n){
+    int i,j,flag=0;
+    int prev;
+    for(i=0;i<n;i++){
+      if(memorySpace[i]!=0 && memorySpace[i]>=requiredSpace){
+            prev=memorySpace[i];
+            memorySpace[i]-=requiredSpace;
+            flag=1;
+            printf("Memory successfully assigned\n");
+           break;
+      }
+    }
+
+    if(flag==0){
+       printf("Memory can not be assigned\n");
+       return;
+    }
+    printf("Memory space after first fit : ");
+    for(j=0;j<n;j++){
+      printf("%d -> ",memorySpace[j]);
+    }
+    memorySpace[i]=prev;
+     printf("\n\n");
+}
+
+void bestFit(int requiredSpace,int memorySpace[],int n){
+    int i,flag=0,ind,min=100;
+    for(i=0;i<n;i++){
+      if(memorySpace[i]!=0 && memorySpace[i]>=requiredSpace && min >= memorySpace[i] ){
+            min=memorySpace[i];
+            ind = i;
+            flag = 1;
+      }
+    }
+    int prev;
+    if(flag==1){
+        prev=memorySpace[ind];
+        memorySpace[ind]-=requiredSpace;
+        flag=1;
+        printf("Memory successfully assigned\n");
+    }
+    if(flag==0){
+       printf("Memory can not be assigned\n");
+       return;
+    }
+    printf("Memory space after best fit : ");
+    for(i=0;i<7;i++){
+      printf("%d -> ",memorySpace[i]);
+    }
+    memorySpace[ind]=prev;
+    printf("\n\n");
+
+}
+
+void worstFit(int requiredSpace,int memorySpace[],int n){
+    int i,flag=0,ind,max=0;
+    for(i=0;i<n;i++){
+      if(memorySpace[i]!=0 && memorySpace[i]>=requiredSpace && max < memorySpace[i] ){
+            max=memorySpace[i];
+            ind = i;
+            flag = 1;
+      }
+    }
+    int prev=memorySpace[ind];
+    if(flag==1){
+        memorySpace[ind]-=requiredSpace;
+        flag=1;
+        printf("Memory successfully assigned\n");
+    }
+    if(flag==0){
+       printf("Memory can not be assigned\n");
+       return ;
+    }
+    printf("Memory space after worst fit : ");
+    for(i=0;i<7;i++){
+      printf("%d -> ",memorySpace[i]);
+    }
+    memorySpace[ind]=prev;
+     printf("\n\n");
+}
+
+int main(){
+    int i,size;
+    int n;
+    printf("Enter size and Memory Space, 0 if process is occupied or size of the space available\n");
+    scanf("%d",&n);
+    int memorySpace[n];
+    for(i=0;i<n;i++){
+      scanf("%d",&memorySpace[i]);
+    }
+    for(i=0;i<n;i++){
+      printf("%d -> ",memorySpace[i]);
+    }
+    printf("\n");
+    int flag=1;
+    while(flag){
+        printf("Enter memory space required\n");
+        scanf("%d",&size);
+        printf("\n");
+        firstFit(size,memorySpace,n);
+        bestFit(size,memorySpace,n);
+        worstFit(size,memorySpace,n);
+
+
+        printf("Want to add another process 1/0\n");
+        scanf("%d",&flag);
+        printf("\n---------------------------------------------------------\n\n");
+    }
+
+}
