@@ -1,0 +1,161 @@
+#include<stdio.h>
+
+void sortArray(int arr[],int n){
+    for(int i =0 ;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if(arr[i]>arr[j]){
+                int temp =arr[i];
+                arr[i] =arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+
+}
+void fcfsFunction(int arr[],int n,int head,int low,int high){
+
+    int ans = 0;
+    for(int i =0 ;i<n ;i++ ){
+        int x = arr[i] - head;
+        ans += (x>0)?x:-1*x;
+        head = arr[i];
+    }
+    printf("Head movements in FCFS : %d\n",ans);
+}
+
+void sstfFunction(int arr[],int n,int head,int low,int high){
+    sortArray(arr,n);
+    int i =0,ans=0;
+    while(head>arr[i]) i++;
+    int j = i-1;
+
+    while(i<n && j >=0){
+        if(arr[i]-head <= head-arr[j]){
+            ans+=arr[i]-head;
+            head = arr[i];
+            i++;
+        }else{
+            ans+=head-arr[j];
+            head = arr[j];
+            j--;
+        }
+    }
+    while(i<n){
+        ans+=arr[i]-head;
+            head = arr[i];
+            i++;
+    }
+    while(j>=0){
+        ans+=head-arr[j];
+            head = arr[j];
+            j--;
+    }
+
+    printf("Head movements in SSTF : %d",ans);
+
+}
+void scanFunction(int arr[],int n,int head,int low,int high){
+    sortArray(arr,n);
+    int ch;
+    printf("Enter the direction 1.left 2.right\n");
+    scanf("%d",&ch);
+    int ans=0;
+    if(ch==2){
+        ans+=high-head;
+        ans+=high-arr[0];
+        printf("SCAN while moving right : %d",ans);
+    }else{
+        ans+=head-low;
+        ans+=arr[n-1]-low;
+         printf("SCAN while moving right : %d",ans);
+    }
+
+}
+void cscanFunction(int arr[],int n,int head,int low,int high){
+    sortArray(arr,n);
+    int ch;
+    printf("Enter the direction 1.left 2.right\n");
+    scanf("%d",&ch);
+    int i =0;
+    int ans=0;
+    if(ch==2){
+        ans+=high-head;
+        while(arr[i]<head) i++;
+        ans+=arr[i-1]-low;
+        printf("C-SCAN while moving right : %d",ans);
+    }else{
+        ans+=head-low;
+        while(arr[i]<head) i++;
+        ans+=high-arr[i];
+         printf("C-SCAN while moving right : %d",ans);
+    }
+}
+void lookFunction(int arr[],int n,int head,int low,int high){
+    sortArray(arr,n);
+    int ch;
+    printf("Enter the direction 1.left 2.right\n");
+    scanf("%d",&ch);
+    int ans=0;
+    if(ch==2){
+        ans+=arr[n-1]-head;
+        ans+=arr[n-1]-arr[0];
+        printf("SCAN while moving right : %d",ans);
+    }else{
+        ans+=head-arr[0];
+        ans+=arr[n-1]-arr[0];
+         printf("SCAN while moving right : %d",ans);
+    }
+}
+
+void clookFunction(int arr[],int n,int head,int low,int high){
+    sortArray(arr,n);
+    int ch;
+    printf("Enter the direction 1.left 2.right\n");
+    scanf("%d",&ch);
+    int ans=0,i=0;
+    if(ch==2){
+        ans+=arr[n-1]-head;
+        while(arr[i]<head) i++;
+        ans+=arr[i-1]-arr[0];
+        printf("SCAN while moving right : %d",ans);
+    }else{
+        ans+=head-arr[0];
+        while(arr[i]<head) i++;
+        ans+=arr[n-1]-arr[i];
+        printf("SCAN while moving right : %d",ans);
+    }
+}
+
+int main(){
+    int ch,n,head,low,high;
+    int flag=1;
+    printf("Enter the value of n, head,low, high, elements\n");
+    scanf("%d %d %d %d",&n,&head,&low,&high);
+    int arr[n];
+    for(int i =0 ;i < n ; i++){
+        scanf("%d",&arr[i]);
+    }
+    printf("Enter your choice of disk scheduling\n1.FCFS  2.SSTF  3.SCAN  4.C-SCAN  5.LOOK  6.C-LOOK 7.Exit\n");
+    while(flag){
+        scanf("%d",&ch);
+
+        switch(ch){
+            case 1 : fcfsFunction(arr,n,head,low,high);
+                    break;
+            case 2 : sstfFunction(arr,n,head,low,high);
+                    break;
+            case 3 : scanFunction(arr,n,head,low,high);
+                    break;
+            case 4 : cscanFunction(arr,n,head,low,high);
+                    break;
+            case 5 : lookFunction(arr,n,head,low,high);
+                    break;
+            case 6 : clookFunction(arr,n,head,low,high);
+                    break;
+            case 7 : flag = 0;
+                    break;
+            default : printf("Invalid choice\n");
+                    break;
+        }
+    }
+}
